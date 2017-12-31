@@ -42,7 +42,7 @@ public class CourseEndpoint {
     @ApiOperation(value = "Exclui o curso baseado no id e retorna Status 200/.")
     @DeleteMapping(path = "{id}")
     public ResponseEntity<?> delete(@PathVariable long id) {
-        courseService.throwResourceNotFound(courseRepository.findOne(id));
+        courseService.throwResourceNotFound(id);
         courseRepository.delete(id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
@@ -50,23 +50,17 @@ public class CourseEndpoint {
     @ApiOperation(value = "Atualiza o curso baseado no id e retorna Status 200/.")
     @PutMapping
     public ResponseEntity<?> update(@Valid @RequestBody Course course) {
-        courseService.throwResourceNotFound(courseRepository.findOne(course));
+        courseService.throwResourceNotFound(course);
         courseRepository.save(course);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-
-
-
-
-
-
-
-
-
-
-
-
+    @ApiOperation(value = "Cria um novo curso e retorna o mesmo.")
+    @PostMapping
+    public ResponseEntity<?> create(@Valid @RequestBody Course course) {
+        course.setProfessor(endpointUtil.extractProfessorFromToken());
+        return new ResponseEntity<>(courseRepository.save(course), HttpStatus.OK);
+    }
 
 
 }

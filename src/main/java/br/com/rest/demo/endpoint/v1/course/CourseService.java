@@ -20,4 +20,10 @@ public class CourseService implements Serializable {
         }
     }
 
+    public void throwResourceNotFound(long courseId) {
+        if (courseId == 0 || courseRepository.findOne(courseId) == null) {
+            throw new ResourceNotFoundException("Curso não encontrado");
+        }
+    }
+
 }
